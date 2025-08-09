@@ -1,0 +1,36 @@
+name: Daily Tweet Bot
+
+on:
+  schedule:
+    # Run once per hour (random posting logic inside the script)
+    - cron: "0 * * * *"
+  workflow_dispatch: # allows manual run
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests requests_oauthlib python-dotenv
+
+      - name: Run bot (random hour selection)
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          MENTION_HANDLE: ${{ secrets.MENTION_HANDLE }}
+        run: |
+          import random, os, subprocess
+          # Pick a single hour per day to post
+          if random.randint(0, 23) == int(os.getenv('GITHUB_RUN_NUMBER')) % 24:
+              subprocess.run(["python3", "your_script.py"], check=True)
