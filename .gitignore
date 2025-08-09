@@ -1,0 +1,4 @@
+.env
+recent_nums.json
+__pycache__/
+*.pyc
