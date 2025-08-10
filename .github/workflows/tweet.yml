@@ -34,3 +34,4 @@ jobs:
           # Pick a single hour per day to post
           if random.randint(0, 23) == int(os.getenv('GITHUB_RUN_NUMBER')) % 24:
               subprocess.run(["python3", "your_script.py"], check=True)
+        shell: python
